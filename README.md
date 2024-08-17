@@ -17,13 +17,11 @@
             Умею работать с гитом;<br>
             Имею дополнительный диплом по работе с БД.
         </p>
-
         <h2 align="center">Софт скиллы:</h2>
         <p style="line-height: 1.6;">
             Быстро обучаюсь, хорош в общении как с клиентом, так и с разработчиком;<br>
             Умею организовывать мероприятия и командную работу.
         </p>
-
         <h2 align="center">В гите представлены следующие папки:</h2>
         <ul style="list-style-type: square; line-height: 1.6;">
             <li><strong>C#:</strong> вордовские документы с заданиями, кодом и комментариями к решениям;</li>
@@ -44,13 +42,11 @@
                 </ul>
             </li>
         </ul>
-
         <h2 align="center">Презентация по работе с БД:</h2>
         <p style="line-height: 1.6;">
             Дополнительно есть презентация по работе с БД, но сама работа, к сожалению, не сохранилась.
         </p>
     </div>
-
     <div style="margin-top: 20px;">
         <a href="https://t.me/Denkajska" target="_blank" style="margin: 0 10px;">
             <img src="https://img.shields.io/badge/Telegram-blue?style=for-the-badge&logo=Telegram&logoColor=white" alt="Telegram" style="width: 120px;">
