@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<script language="Javascript">
+var parametr=location.search.substring(1).split("&")
+function TableYchastki()
+{
+div1.innerHTML = null;
+var a=mytextarea.value.split(/$\s*/m);
+if(a.length==0)
+{
+var n = ChisloYchastkov.value;
+}
+else
+{
+n=a.length;
+mytextarea.style.height=n*15+'px';
+ChisloYchastkov.value=n;
+}
+div1.style.display="block";
+for(var i=1; i<=n; i++){
+if(i<=n){
+element1 = "ploshad"+i;
+element2 = "koord"+i;
+if(localStorage[element2]==undefined)
+{
+localStorage[element2]==""
+}
+if(localStorage[element1]==undefined)
+{
+localStorage[element1]=""
+}
+if (parametr.length>1) 
+{
+localStorage[element1]=parametr[i-1]
+}
+div1.innerHTML=div1.innerHTML+"<div style = 'float:left'>Площадь повреждённой территории на <b>"+i+" участке:</b><br><input type = text id ='ploshad" + i +"' value='"+ localStorage[element1] +"'></div><div> Координаты контура <b>" + i+"-го участка</b><br><input type text id ='koord"+i+"'value='"+localStorage[element2]+ "'></div><br>";
+}
+}
+div1.innerHTML=div1.innerHTML+"<hr><input type=button value='Поиск аномальных значений' class='my-button2' onclick='Calc()' id='Button2'><br>"
+div1.innerHTML=div1.innerHTML+"<input type = button value = 'Исключить аномальные значения' class='my-button' onClick = 'AnomalHide()'id='Button3'<br>"
+div1.innerHTML=div1.innerHTML+"<input type = button value = 'Усреднить аномальные значения' class='my-button' onClick = 'AnomalMid()'id='Button4'<br>"
+div1.innerHTML=div1.innerHTML+"<input type = button value = 'Понизить аномальные значения до максимального имеющегося' class='my-button' onClick = 'AnomalMax()'id='Button5'<br>"
+div1.innerHTML=div1.innerHTML+"<input type = button value = 'Понизить аномальные значения до максмимального возможного' class='my-button' onClick = 'AnomalMaxCalc()'id='Button6'<br>"
+div1.innerHTML=div1.innerHTML+"Общая площадь повреждённой территории: <input type=text id='Sumploshad'><br>"
+div1.innerHTML=div1.innerHTML+"Средняя площадь повреждённой территории: <input type=text id='Sredploshad'><br>"
+div1.innerHTML=div1.innerHTML+"Среднеквадратическое отклонение: <input type=text id='Otklonenie'><br>"
+document.getElementById('Button1').style.display = 'block';
+document.getElementById('Button2').style.display = 'block';
+document.getElementById('Button3').style.display = 'none';
+document.getElementById('Button4').style.display = 'none';
+document.getElementById('Button5').style.display = 'none';
+document.getElementById('Button6').style.display = 'none';
+if(a.length>0)
+{
+for(var i =1;i<=n;i++)
+{
+element1="ploshad"+i;
+element2 = "koord"+i;
+if(localStorage[element2]==undefined)
+{
+localStorage[element2]==""
+}
+document.getElementById(element1).value=a[i-1];
+}
+}
+localStorage["ChisloYchastkov"] = n;
+Calc()
+}
+function Calc()
+{
+maxv=0;
+document.getElementById('Button3').style.display = 'none';
+document.getElementById('Button4').style.display = 'none';
+document.getElementById('Button5').style.display = 'none';
+document.getElementById('Button6').style.display = 'none';
+var n=ChisloYchastkov.value;
+Sumploshad.value=0;
+Sredploshad.value=0;
+Otklonenie.value=0;
+for(var i=1; i<=n; i++)
+{
+if(i<=n)
+{
+element1 = "ploshad"+i;
+element2 = "koord"+i;
+localStorage[element2]=document.getElementById(element2).value;
+localStorage[element1]=document.getElementById(element1).value;
+Sumploshad.value=+Sumploshad.value+
++document.getElementById(element1).value;
+if(parseFloat(document.getElementById(element1).value)>maxv)
+{
+maxv=parseFloat(document.getElementById(element1).value)
+}
+}
+}
+Sredploshad.value= Sumploshad.value/n;
+for(var i=1;i<=n;i++){
+if(i<=n)
+{
+element1="ploshad"+i;
+Otklonenie.value = +Otklonenie.value+Math.pow(document.getElementById(element1).value-Sredploshad.value, 2);
+}
+}
+Otklonenie.value = Math.sqrt(Otklonenie.value/n);
+for(var i=1; i<=n;i++)
+{
+if(i<=n)
+{
+element1 = "ploshad"+i;
+{
+document.getElementById(element1).style.background='white';
+}
+NABL = 1.791;
+if ((n> 5)&(n<=10)) {NABL = 2.146}
+else if (n<=15) {NABL = 2.326}
+else if (n<=20) {NABL = 2.447}
+else if (n<=25) {NABL = 2.537}
+else {NABL = 2.633}
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value >=NABL)
+{
+document.getElementById(element1).style.background='red';
+document.getElementById('Button3').style.display = 'block';
+document.getElementById('Button4').style.display = 'block';
+document.getElementById('Button5').style.display = 'block';
+document.getElementById('Button6').style.display = 'block';
+}
+}
+}
+CanvDraw()
+map()
+}
+function AnomalHide()
+{
+var myarray = [];
+var j = 0;
+var n = ChisloYchastkov.value;
+for(var i =1;i<=n;i++)
+{
+element1 ="ploshad"+i;
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value<NABL)
+{
+myarray[j]=document.getElementById(element1).value;
+j=j+1;
+}
+}
+ChisloYchastkov.value=j;
+TableYchastki();
+for(var i= 1; i <=j;i++)
+{
+element1="ploshad"+i;
+document.getElementById(element1).value=myarray[i-1];
+}
+Calc()
+}
+function AnomalMid()
+{
+var n = ChisloYchastkov.value;
+for(var i =1;i<=n;i++)
+{
+element1 ="ploshad"+i;
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value>=NABL)
+{
+document.getElementById(element1).value=Sredploshad.value;
+document.getElementById(element1).style.background='white';
+}
+}
+Calc()
+}
+function AnomalMax()
+{
+var mymax=0;
+var n = ChisloYchastkov.value;
+for(var i =1;i<=n;i++)
+{
+element1="ploshad"+i;
+if (document.getElementById(element1).value>Number(mymax) && (document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value<NABL)
+{
+mymax=document.getElementById(element1).value
+}
+}
+for(var i =1; i<=n;i++)
+{
+element1 = "ploshad"+i;
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value>=NABL)
+{
+document.getElementById(element1).value=mymax;
+document.getElementById(element1).style.background='white';
+}
+}
+Calc()
+}
+function AnomalMaxCalc()
+{
+var n = ChisloYchastkov.value;
+for(var i =1;i<=n;i++)
+{
+element1="ploshad"+i;
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value>=NABL)
+{
+document.getElementById(element1).value=0.99*(NABL*Otklonenie.value+
++Sredploshad.value);
+document.getElementById(element1).style.background='white'
+}
+}
+Calc()
+}
+function myLoad()
+{
+if(localStorage["ChisloYchastkov"]>0)
+{
+ChisloYchastkov.value=localStorage["ChisloYchastkov"]
+}
+if(parametr.length>1)
+{
+ChisloYchastkov.value=parametr.length
+}
+}
+function MySave()
+{
+var n = ChisloYchastkov.value;
+var mysavedtext="";
+for(var i = 1; i<=n;i++)
+{
+element1="ploshad"+i;
+mysavedtext=mysavedtext+document.getElementById(element1).value+';';
+}
+document.write('<a href="data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURIComponent(mysavedtext) + '"download="download.txt">download.txt</a>');
+}
+function myClear()
+{
+var n =ChisloYchastkov.value;
+for(var i = 1; i<=n;i++)
+{
+element1="ploshad"+i;
+document.getElementById(element1).value="";
+localStorage[element1]="";
+}
+Calc()
+}
+function CanvDraw()
+{
+var max = NABL*Otklonenie.value+
++Sredploshad.value;
+var mid = parseFloat(Sredploshad.value);
+var disp = mid+parseFloat(Otklonenie.value);
+var minus = mid-parseFloat(Otklonenie.value);
+var canv = document.getElementById("canv");
+var ctx = canv.getContext('2d');
+var koord;
+canv.width=600;
+canv.height=300;
+ctx.beginPath();
+ctx.strokeStyle = "black";
+ctx.lineWidth=1;
+ctx.font = '16px';
+ctx.fillStyle = 'black';
+ctx.fillText('0',3.5,290.5);
+ctx.moveTo(5.5,5.5);
+ctx.lineTo(3.5,15.5);
+ctx.moveTo(5.5,5.5);
+ctx.lineTo(7.5,15.5);
+ctx.moveTo(5.5,5.5);
+ctx.lineTo(5.5,280.5);
+ctx.lineTo(590.5,280.5);
+ctx.lineTo(580.5,278.5);
+ctx.lineTo(590.5,280.5);
+ctx.moveTo(590.5,280.5);
+ctx.lineTo(580.5,282.5);
+ctx.stroke();
+var n = ChisloYchastkov.value;
+previousY = {};//y координата
+for (var i = 1; i <= n; i++) 
+{
+element1 = "ploshad" + i;
+koord = document.getElementById(element1).value;
+if (previousY[koord] === undefined) 
+{
+previousY[koord] = 152.5;
+} 
+else 
+{
+previousY[koord] += 10; 
+}
+ctx.moveTo(5.5 + 570.5 * koord / maxv - 3,previousY[koord]);
+ctx.lineTo(5.5 + 570.5 * koord / maxv + 3,previousY[koord]-6);
+ctx.stroke();
+ctx.moveTo(5.5 + 570.5 * koord / maxv + 3,previousY[koord]);
+ctx.lineTo(5.5 + 570.5 * koord / maxv - 3,previousY[koord]-6);
+ctx.fillText(Math.round(koord), 5.5+570.5*koord/maxv-5,295.5);
+ctx.stroke();
+}
+ctx.closePath();
+ctx.beginPath();
+ctx.strokeStyle = "red";
+ctx.moveTo(5.5+570.5*max/maxv,5.5);
+ctx.lineTo(5.5+570.5*max/maxv,280.5);
+ctx.fillText('Аномал.',5.5+550.5*max/maxv,7.5);
+ctx.fillText(max.toFixed(2),5.5+550.5*max/maxv,17.5);
+ctx.stroke();
+ctx.closePath();
+ctx.beginPath();
+ctx.strokeStyle = "green";
+ctx.moveTo(5.5+570.5*mid/maxv,5.5);
+ctx.lineTo(5.5+570.5*mid/maxv,280.5);
+ctx.fillText('Сред.',5.5+550.5*mid/maxv,7.5);
+ctx.fillText(mid.toFixed(2),5.5+550.5*mid/maxv,17.5);
+ctx.stroke();
+ctx.closePath();
+ctx.beginPath();
+ctx.strokeStyle = "#FFD000";
+ctx.moveTo(5.5+570.5*disp/maxv,5.5);
+ctx.lineTo(5.5+570.5*disp/maxv,280.5);
+ctx.fillText('Откл.',5.5+550.5*disp/maxv,7.5);
+ctx.fillText(disp.toFixed(2),5.5+550.5*disp/maxv,17.5);
+ctx.stroke();
+ctx.closePath();
+ctx.beginPath();
+ctx.strokeStyle = "#FFD000";
+ctx.moveTo(5.5+570.5*minus/maxv,5.5);
+ctx.lineTo(5.5+570.5*minus/maxv,280.5);
+ctx.fillText('Откл.',5.5+550.5*minus/maxv,7.5);
+ctx.fillText(minus.toFixed(2),5.5+550.5*minus/maxv,17.5);
+ctx.stroke();
+ctx.closePath();
+}
+function map()
+{
+var canv = document.getElementById("canv2");
+var ctx = canv.getContext('2d');
+canv.width = 600;
+canv.height=300;
+var pic = new Image();
+ctx = canv.getContext('2d');
+pic.src='map.jpg';
+canv.width = 600;
+canv.height=300;
+var yellow = 200;
+pic.onload = function()
+{
+ctx.drawImage(pic,0,0,canv.width,canv.height);
+var n=parseFloat(ChisloYchastkov.value);
+for(var i =1; i<=n;i++)
+{
+sredX=0;
+sredY=0;
+element1="ploshad"+i;
+element2="koord"+i;
+koord=document.getElementById(element2).value;
+koordmass=koord.split(";");
+ctx.beginPath();
+yellow += 5;
+ctx.fillStyle = "rgba(200,"+ yellow +",0,0.7)";
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value>=NABL)
+{
+ctx.fillStyle="rgba(255,0,0,0.7)"
+}
+var numPoints = koordmass.length / 2; 
+for (var j = 0; j < koordmass.length; j += 2) 
+{
+var x = parseFloat(koordmass[j]);
+var y = parseFloat(koordmass[j + 1]);
+sredX += x;
+sredY += y;
+ctx.lineTo(x, y);
+}
+sredX /= numPoints; 
+sredY /= numPoints; 
+ctx.fill();
+ctx.closePath();
+ctx.fillStyle="black";
+ctx.font = "italic 16 pt Arial";
+ctx.fillText(document.getElementById(element1).value,sredX,sredY);
+}
+}
+}
+</script>
+<link rel="stylesheet" href="project.css">
+</head>
+<body onload="myLoad()">
+<b>Введите количество лесных участков, подверженных болезни</b><br>
+<canvas id ="canv">Обновите браузер</canvas>
+<canvas id ="canv2">Обновите браузер</canvas>
+<input type=text value="10" id="ChisloYchastkov"><br>
+<input type="button" value="Далее" onclick="TableYchastki()" id="Button1" class="my-button"><hr>
+<input type=button value="Сохранить результаты" id = "ButSave" class="my-button" onclick="MySave()">
+<input type=button value="Удалить введённые значения" id = "ButClear" class="my-button2" onclick="myClear()">
+<div id="div1" style="display:none"></div>
+<br><textarea id = "mytextarea" placeholder="Скопируйте сюда все значения" style = "width:300px;"></textarea>
+</body>
+</html>

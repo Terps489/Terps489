@@ -1,0 +1,47 @@
+.my-button 
+{
+    background-color: #00FA9A;
+    border: 1px solid black;
+    color: #010f0f;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    border-radius: 500px;
+    transition: all 0.3s ease;
+}
+.my-button:hover 
+{
+    background-color: #008B45;
+    padding: 6px 11px;
+}
+.my-button2
+{
+    background-color: #FF6347;
+    border: 1px solid black;
+    color: #010f0f;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+.my-button2:hover 
+{
+    background-color: #FF0347;
+    padding: 6px 11px;
+}
+#canv, #canv2{
+    width: 500px;
+    height: 250px;
+    border: 1px double black;
+    float: right; 
+    margin: 20px;
+    margin-top: 20px;
+    margin-left: 20px; 
+}
+
+

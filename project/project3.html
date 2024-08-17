@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<script language="Javascript">
+function TableYchastki()
+{
+div1.innerHTML = null;
+var a=mytextarea.value.split(/$\s*/m);
+if(a.length==0)
+{
+var n = ChisloYchastkov.value;
+}
+else
+{
+n=a.length;
+mytextarea.style.height=n*15+'px';
+ChisloYchastkov.value=n;
+}
+div1.style.display="block";
+for(var i=1; i<=n; i++){
+if(i<=n){
+element1 = "ploshad"+i;
+if(localStorage[element1]==undefined)
+{
+localStorage[element1]=""
+}
+div1.innerHTML=div1.innerHTML+"<div style = 'width:375px;float:left'>Площадь повреждённой территории на <b>"+i+" участке:</b></div><input type = text id ='ploshad"+i+"'value='"+localStorage[element1]+"'><br>";
+}
+}
+div1.innerHTML=div1.innerHTML+"<hr><input type=button value='Поиск аномальных значений' onclick='Calc()' id='Button2'><br>"
+div1.innerHTML=div1.innerHTML+"<input type = button value = 'Исключить аномальные значения' onClick = 'AnomalHide()'id='Button3'<br>"
+div1.innerHTML=div1.innerHTML+"<input type = button value = 'Усреднить аномальные значения' onClick = 'AnomalMid()'id='Button4'<br>"
+div1.innerHTML=div1.innerHTML+"<input type = button value = 'Понизить аномальные значения до максимального имеющегося' onClick = 'AnomalMax()'id='Button5'<br>"
+div1.innerHTML=div1.innerHTML+"<input type = button value = 'Понизить аномальные значения до максмимального возможного' onClick = 'AnomalMaxCalc()'id='Button6'<br>"
+div1.innerHTML=div1.innerHTML+"Общая площадь повреждённой территории: <input type=text id='Sumploshad'><br>"
+div1.innerHTML=div1.innerHTML+"Средняя площадь повреждённой территории: <input type=text id='Sredploshad'><br>"
+div1.innerHTML=div1.innerHTML+"Среднеквадратическое отклонение: <input type=text id='Otklonenie'><br>"
+document.getElementById('Button1').style.display = 'block';
+document.getElementById('Button2').style.display = 'block';
+document.getElementById('Button3').style.display = 'none';
+document.getElementById('Button4').style.display = 'none';
+document.getElementById('Button5').style.display = 'none';
+document.getElementById('Button6').style.display = 'none';
+if(a.length>0)
+{
+for(var i =1;i<=n;i++)
+{
+element1="ploshad"+i;
+document.getElementById(element1).value=a[i-1];
+}
+}
+localStorage["ChisloYchastkov"] = n;
+Calc()
+}
+function Calc()
+{
+document.getElementById('Button3').style.display = 'none';
+document.getElementById('Button4').style.display = 'none';
+document.getElementById('Button5').style.display = 'none';
+document.getElementById('Button6').style.display = 'none';
+var n=ChisloYchastkov.value;
+Sumploshad.value=0;
+Sredploshad.value=0;
+Otklonenie.value=0;
+for(var i=1; i<=n; i++)
+{
+if(i<=n)
+{
+element1 = "ploshad"+i;
+localStorage[element1]=document.getElementById(element1).value;
+Sumploshad.value=+Sumploshad.value+
++document.getElementById(element1).value;
+}
+}
+Sredploshad.value= Sumploshad.value/n;
+for(var i=1;i<=n;i++){
+if(i<=n)
+{
+element1="ploshad"+i;
+Otklonenie.value = +Otklonenie.value+Math.pow(document.getElementById(element1).value-Sredploshad.value, 2);
+}
+}
+Otklonenie.value = Math.sqrt(Otklonenie.value/n);
+for(var i=1; i<=n;i++)
+{
+if(i<=n)
+{
+element1 = "ploshad"+i;
+{
+document.getElementById(element1).style.background='white';
+}
+NABL = 1.791;
+if ((n> 5)&(n<=10)) {NABL = 2.146}
+else if (n<=15) {NABL = 2.326}
+else if (n<=20) {NABL = 2.447}
+else if (n<=25) {NABL = 2.537}
+else {NABL = 2.633}
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value >=NABL)
+{
+document.getElementById(element1).style.background='red';
+document.getElementById('Button3').style.display = 'block';
+document.getElementById('Button4').style.display = 'block';
+document.getElementById('Button5').style.display = 'block';
+document.getElementById('Button6').style.display = 'block';
+}
+}
+}
+}
+function AnomalHide()
+{
+var myarray = [];
+var j = 0;
+var n = ChisloYchastkov.value;
+for(var i =1;i<=n;i++)
+{
+element1 ="ploshad"+i;
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value<NABL)
+{
+myarray[j]=document.getElementById(element1).value;
+j=j+1;
+}
+}
+ChisloYchastkov.value=j;
+TableYchastki();
+for(var i= 1; i <=j;i++)
+{
+element1="ploshad"+i;
+document.getElementById(element1).value=myarray[i-1];
+}
+Calc()
+}
+function AnomalMid()
+{
+var n = ChisloYchastkov.value;
+for(var i =1;i<=n;i++)
+{
+element1 ="ploshad"+i;
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value>=NABL)
+{
+document.getElementById(element1).value=Sredploshad.value;
+document.getElementById(element1).style.background='white';
+}
+}
+Calc()
+}
+function AnomalMax()
+{
+var mymax=0;
+var n = ChisloYchastkov.value;
+for(var i =1;i<=n;i++)
+{
+element1="ploshad"+i;
+if (document.getElementById(element1).value>Number(mymax) && (document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value<NABL)
+{
+mymax=document.getElementById(element1).value
+}
+}
+for(var i =1; i<=n;i++)
+{
+element1 = "ploshad"+i;
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value>=NABL)
+{
+document.getElementById(element1).value=mymax;
+document.getElementById(element1).style.background='white';
+}
+}
+Calc()
+}
+function AnomalMaxCalc()
+{
+var n = ChisloYchastkov.value;
+for(var i =1;i<=n;i++)
+{
+element1="ploshad"+i;
+if((document.getElementById(element1).value-Sredploshad.value)/Otklonenie.value>=NABL)
+{
+document.getElementById(element1).value=0.99*(NABL*Otklonenie.value+
++Sredploshad.value);
+document.getElementById(element1).style.background='white'
+}
+}
+Calc()
+}
+function myLoad()
+{
+if(localStorage["ChisloYchastkov"]>0)
+{
+ChisloYchastkov.value=localStorage["ChisloYchastkov"]
+}
+}
+</script>
+</head>
+<body onload="myLoad()">
+<b>Введите количество лесных участков, подверженных болезни</b><br>
+
+<input type=text value="10" id="ChisloYchastkov"><br>
+<input type=button value="Далее" onclick="TableYchastki()" id="Button1"><hr>
+<div id="div1" style="display:none"></div>
+<br><textarea id = "mytextarea" placeholder="Скопируйте сюда все значения" style = "width:300px;"></textarea>
+</body>
+</html>
