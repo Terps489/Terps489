@@ -4,9 +4,9 @@
 
 <div align="center">
     <a href="https://t.me/Denkajska" target="_blank">
-        <img src="https://raw.githubusercontent.com/Terps489/Terps489/main/telegram_icon.png" alt="Telegram" style="width:100px;">
+        <img src="https://img.shields.io/badge/Telegram-blue?style=for-the-badge&logo=Telegram&logoColor=white" alt="Telegram" style="width:100px;">
     </a>
     <a href="https://wa.me/79961248729" target="_blank">
-        <img src="https://raw.githubusercontent.com/Terps489/Terps489/main/WhatsApp_icon.png" alt="WhatsApp" style="width:100px;">
+        <img src="https://img.shields.io/badge/WhatsApp-green?style=for-the-badge&logo=WhatsApp&logoColor=white" alt="WhatsApp" style="width:100px;">
     </a>
 </div>
