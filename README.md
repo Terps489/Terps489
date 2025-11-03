@@ -1,6 +1,6 @@
 <div id="header" align="center" style="background-color: #f5f5f5; padding: 20px; border-radius: 10px; max-width: 800px; margin: 0 auto;">
     <h1 style="font-family: 'Arial', sans-serif; font-size: 2.5em; color: #333;">
-        Портфолио разработчика Ядрышникова Дениса Максимовича
+        Портфолио Ядрышникова Дениса Максимовича
     </h1>
 </div>
 
@@ -8,9 +8,7 @@
     <div style="max-width: 800px; margin: 0 auto; text-align: left;">
         <h2 align="center">О себе:</h2>
         <p style="line-height: 1.6;">
-            Студент 4 курса, Казанский национальный исследовательский технологический университет, иду на красный диплом;<br>
-            Работаю в ИБР, отдел СД, с января 2024;<br>
-            Имею опыт работы на ОС macOS и windows;<br>
+            Имею опыт работы на ОС macOS, linux и windows;<br>
             Прошёл отборочный интенсив от сбербанка;<br>
             Базовые знания работы с алгоритмами, знание синтаксиса языков Си, JS, Python и Java;<br>
             Создавал сайты в рамках обучения front-end;<br>
